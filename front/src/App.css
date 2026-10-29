@@ -1,0 +1,413 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* =========================
+   STYLE GLOBAL UNIVERSITAIRE
+========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+  color: #1e293b;
+  background: #f1f5f9;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* =========================
+   FOND PRINCIPAL
+========================= */
+
+.min-h-screen {
+  min-height: 100vh;
+  background: #f1f5f9 !important;
+  padding-top: 45px !important;
+  padding-bottom: 45px !important;
+}
+
+.max-w-4xl {
+  max-width: 1050px !important;
+}
+
+/* =========================
+   EN-TÊTE
+========================= */
+
+.text-center.mb-10 {
+  background: #ffffff;
+  padding: 32px 20px;
+  margin-bottom: 28px !important;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  border-top: 5px solid #1d4ed8;
+  box-shadow: 0 5px 20px rgba(15, 23, 42, 0.05);
+}
+
+.text-center h1 {
+  color: #12305a !important;
+  font-size: 30px !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.8px;
+}
+
+.text-center p {
+  color: #64748b !important;
+  font-size: 14px !important;
+  margin-top: 12px !important;
+}
+
+/* =========================
+   MESSAGES DE NOTIFICATION
+========================= */
+
+.mb-6.p-4.rounded-xl {
+  border-radius: 10px !important;
+  font-weight: 600;
+  box-shadow: none !important;
+}
+
+/* =========================
+   FORMULAIRE
+========================= */
+
+.gestion-form {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 30px;
+  margin-bottom: 28px;
+  box-shadow: 0 5px 20px rgba(15, 23, 42, 0.05);
+  transition: box-shadow 0.25s ease;
+}
+
+.gestion-form:hover {
+  transform: none;
+  box-shadow: 0 8px 26px rgba(15, 23, 42, 0.08);
+}
+
+.gestion-form h2 {
+  color: #12305a;
+  background: none;
+  -webkit-text-fill-color: #12305a;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Champs du formulaire */
+
+.gestion-form input {
+  width: 100%;
+  min-width: 0;
+  padding: 14px 15px;
+  background: #f8fafc;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  outline: none;
+  box-shadow: none;
+}
+
+.gestion-form input::placeholder {
+  color: #94a3b8;
+}
+
+.gestion-form input:hover {
+  border-color: #94a3b8;
+}
+
+.gestion-form input:focus {
+  border-color: #2563eb;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+/* =========================
+   BOUTONS DU FORMULAIRE
+========================= */
+
+.gestion-form button {
+  padding: 13px 20px;
+  border: none;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  box-shadow: none;
+}
+
+.gestion-form button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.12);
+}
+
+/* Bouton Ajouter */
+
+.gestion-form button.bg-emerald-600 {
+  background: #1d4ed8 !important;
+  color: #ffffff !important;
+}
+
+.gestion-form button.bg-emerald-600:hover {
+  background: #1e40af !important;
+}
+
+/* Bouton Modifier */
+
+.gestion-form button.bg-indigo-600 {
+  background: #0f766e !important;
+  color: #ffffff !important;
+}
+
+.gestion-form button.bg-indigo-600:hover {
+  background: #115e59 !important;
+}
+
+/* Bouton Annuler */
+
+.gestion-form button.bg-slate-200 {
+  background: #e2e8f0 !important;
+  color: #334155 !important;
+}
+
+.gestion-form button.bg-slate-200:hover {
+  background: #cbd5e1 !important;
+}
+
+/* Badge Mode édition */
+
+.gestion-form .bg-amber-50 {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border-color: #bfdbfe !important;
+}
+
+/* =========================
+   CARTE DE LA LISTE
+========================= */
+
+.bg-white {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 18px !important;
+  box-shadow: 0 5px 20px rgba(15, 23, 42, 0.05) !important;
+  backdrop-filter: none;
+}
+
+.bg-white h2 {
+  color: #12305a !important;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.bg-white .bg-slate-100 {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+}
+
+/* =========================
+   TABLEAU
+========================= */
+
+.overflow-x-auto {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+thead tr {
+  background: #f1f5f9;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+thead th {
+  padding: 16px;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+tbody tr {
+  border-bottom: 1px solid #e2e8f0;
+  transition: background 0.2s ease;
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+}
+
+tbody td {
+  padding: 17px 16px;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+tbody td:first-child {
+  color: #12305a;
+  font-weight: 700;
+}
+
+tbody td:nth-child(2) {
+  color: #64748b;
+}
+
+/* Badge de l'âge */
+
+tbody td .bg-slate-100 {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* =========================
+   BOUTONS D'ACTION
+========================= */
+
+tbody button {
+  padding: 8px 12px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: 700;
+  box-shadow: none;
+}
+
+tbody button:hover {
+  transform: translateY(-1px);
+}
+
+/* Éditer */
+
+tbody button.bg-indigo-50 {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border-color: #bfdbfe;
+}
+
+tbody button.bg-indigo-50:hover {
+  background: #dbeafe !important;
+}
+
+/* Supprimer */
+
+tbody button.bg-rose-50 {
+  background: #fff1f2 !important;
+  color: #be123c !important;
+  border-color: #fecdd3;
+}
+
+tbody button.bg-rose-50:hover {
+  background: #ffe4e6 !important;
+}
+
+/* Message : liste vide */
+
+tbody td[colspan="4"] {
+  padding: 35px 15px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+/* =========================
+   BARRE DE DÉFILEMENT
+========================= */
+
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* =========================
+   RESPONSIVE : TÉLÉPHONE
+========================= */
+
+@media (max-width: 640px) {
+  .min-h-screen {
+    padding: 20px 12px !important;
+  }
+
+  .text-center.mb-10 {
+    padding: 25px 12px;
+  }
+
+  .text-center h1 {
+    font-size: 23px !important;
+  }
+
+  .gestion-form {
+    padding: 20px 16px;
+  }
+
+  .gestion-form h2 {
+    font-size: 17px;
+  }
+
+  .gestion-form button {
+    padding: 12px 14px;
+    font-size: 12px;
+  }
+
+  .bg-white.rounded-2xl {
+    padding: 18px 12px !important;
+  }
+
+  .bg-white h2 {
+    font-size: 16px;
+  }
+
+  thead th,
+  tbody td {
+    padding: 12px 10px;
+  }
+
+  tbody button {
+    margin: 3px 0;
+  }
+}
