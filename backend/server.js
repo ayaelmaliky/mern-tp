@@ -5,7 +5,7 @@ require('dotenv').config();
 
 const app = express();
 
-// --- CONFIGURATION CORS (Autorise toutes les origines pour le développement) ---
+// --- CONFIGURATION CORS ---
 app.use(cors({
   origin: "*", 
   methods: ["GET", "POST", "PUT", "DELETE"],
@@ -16,9 +16,9 @@ app.use(cors({
 app.use(express.json());
 
 // --- CONNEXION MONGODB ---
-const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/gestion-etudiants";
 
+// Évite les avertissements de dépréciation de Mongoose
 mongoose.connect(MONGO_URI)
   .then(() => console.log("Connecté à MongoDB avec succès"))
   .catch((err) => console.error("Erreur de connexion MongoDB :", err));
@@ -81,7 +81,13 @@ app.delete('/api/etudiants/:id', async (req, res) => {
   }
 });
 
-// --- LANCEMENT DU SERVEUR ---
-app.listen(PORT, () => {
-  console.log(`Serveur démarré sur le port ${PORT}`);
-});
+// --- POUR LE DÉVELOPPEMENT LOCAL (Ignoré automatiquement par Vercel) ---
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`Serveur local démarré sur le port ${PORT}`);
+  });
+}
+
+// --- EXPORT POUR VERCEL ---
+module.exports = app;
