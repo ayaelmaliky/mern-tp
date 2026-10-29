@@ -1,178 +1,87 @@
-require("dotenv").config();
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const bcrypt = require("bcryptjs");
-
-// Importer les modèles
-const Etudiant = require("./models/Etudiant");
-const Utilisateur = require("./models/Utilisateur");
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-// Middlewares
-app.use(express.json());
+// --- CONFIGURATION CORS (Autorise toutes les origines pour le développement) ---
 app.use(cors({
-  origin: "http://localhost:5173"
+  origin: "*", 
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// Route de base et de test
-app.get("/", (req, res) => {
-  res.send("Mon premier serveur MERN!");
+// Middleware pour parser le JSON
+app.use(express.json());
+
+// --- CONNEXION MONGODB ---
+const PORT = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/gestion-etudiants";
+
+mongoose.connect(MONGO_URI)
+  .then(() => console.log("Connecté à MongoDB avec succès"))
+  .catch((err) => console.error("Erreur de connexion MongoDB :", err));
+
+// --- MODÈLE ÉTUDIANT ---
+const etudiantSchema = new mongoose.Schema({
+  nom: { type: String, required: true },
+  email: { type: String, required: true },
+  age: { type: Number, required: true }
 });
 
-app.get("/api/test", (req, res) => {
-  res.json({ message: "L'API fonctionne correctement" });
-});
+const Etudiant = mongoose.model('Etudiant', etudiantSchema);
 
-// --- ROUTES CRUD POUR LES ETUDIANTS ---
+// --- ROUTES API ---
 
-// 1. GET : Lire tous les étudiants
-app.get("/api/etudiants", async (req, res) => {
+// 1. GET : Récupérer tous les étudiants
+app.get('/api/etudiants', async (req, res) => {
   try {
     const etudiants = await Etudiant.find();
     res.json(etudiants);
-  } catch (error) {
-    res.status(500).json({ message: "Erreur serveur" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
-// 2. POST : Créer un étudiant
-app.post("/api/etudiants", async (req, res) => {
+// 2. POST : Ajouter un étudiant
+app.post('/api/etudiants', async (req, res) => {
   try {
-    const nouvelEtudiant = new Etudiant({
-      nom: req.body.nom,
-      email: req.body.email,
-      age: req.body.age
-    });
-    const resultat = await nouvelEtudiant.save();
-    res.status(201).json(resultat);
-  } catch (error) {
-    res.status(400).json({ message: "Impossible de créer l'étudiant" });
+    const nouvelEtudiant = new Etudiant(req.body);
+    const savedEtudiant = await nouvelEtudiant.save();
+    res.status(201).json(savedEtudiant);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 });
 
 // 3. PUT : Modifier un étudiant
-app.put("/api/etudiants/:id", async (req, res) => {
+app.put('/api/etudiants/:id', async (req, res) => {
   try {
-    const etudiant = await Etudiant.findByIdAndUpdate(
-      req.params.id,
-      {
-        nom: req.body.nom,
-        email: req.body.email,
-        age: req.body.age
-      },
+    const updatedEtudiant = await Etudiant.findByIdAndUpdate(
+      req.params.id, 
+      req.body, 
       { new: true, runValidators: true }
     );
-    if (!etudiant) {
-      return res.status(404).json({ message: "Etudiant introuvable" });
-    }
-    res.json(etudiant);
-  } catch (error) {
-    res.status(400).json({ message: "Modification impossible" });
+    if (!updatedEtudiant) return res.status(404).json({ error: "Étudiant non trouvé" });
+    res.json(updatedEtudiant);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
   }
 });
 
 // 4. DELETE : Supprimer un étudiant
-app.delete("/api/etudiants/:id", async (req, res) => {
+app.delete('/api/etudiants/:id', async (req, res) => {
   try {
-    const etudiant = await Etudiant.findByIdAndDelete(req.params.id);
-    if (!etudiant) {
-      return res.status(404).json({ message: "Étudiant introuvable" });
-    }
-    res.json({ message: "Étudiant supprimé" });
-  } catch (error) {
-    res.status(400).json({ message: "Suppression impossible" });
+    const deletedEtudiant = await Etudiant.findByIdAndDelete(req.params.id);
+    if (!deletedEtudiant) return res.status(404).json({ error: "Étudiant non trouvé" });
+    res.json({ message: "Étudiant supprimé avec succès" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 
-// --- ROUTES D'AUTHENTIFICATION ---
-
-// Inscription
-app.post("/api/auth/register", async (req, res) => {
-  try {
-    const { nom, email, password } = req.body;
-
-    if (!nom || !email || !password) {
-      return res.status(400).json({ message: "Tous les champs sont obligatoires" });
-    }
-
-    const emailNormalise = email.trim().toLowerCase();
-    const existe = await Utilisateur.findOne({ email: emailNormalise });
-    if (existe) {
-      return res.status(409).json({ message: "Cette adresse e-mail est déjà utilisée" });
-    }
-
-    const passwordHash = await bcrypt.hash(password, 12);
-
-    const utilisateur = await Utilisateur.create({
-      nom,
-      email: emailNormalise,
-      password: passwordHash
-    });
-
-    res.status(201).json({
-      message: "Compte créé avec succès",
-      utilisateur: {
-        id: utilisateur._id,
-        nom: utilisateur.nom,
-        email: utilisateur.email
-      }
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Erreur serveur" });
-  }
+// --- LANCEMENT DU SERVEUR ---
+app.listen(PORT, () => {
+  console.log(`Serveur démarré sur le port ${PORT}`);
 });
-
-// Connexion
-app.post("/api/auth/login", async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({ message: "E-mail et mot de passe obligatoires" });
-    }
-
-    const utilisateur = await Utilisateur.findOne({
-      email: email.trim().toLowerCase()
-    });
-
-    if (!utilisateur) {
-      return res.status(401).json({ message: "Identifiants incorrects" });
-    }
-
-    const valide = await bcrypt.compare(password, utilisateur.password);
-    if (!valide) {
-      return res.status(401).json({ message: "Identifiants incorrects" });
-    }
-
-    res.json({
-      message: "Connexion réussie",
-      utilisateur: {
-        id: utilisateur._id,
-        nom: utilisateur.nom,
-        email: utilisateur.email
-      }
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Erreur serveur" });
-  }
-});
-
-// Connexion à MongoDB et démarrage du serveur
-async function startServer() {
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("MongoDB est connecté");
-
-    app.listen(PORT, () => {
-      console.log(`Serveur lancé sur le port ${PORT}`);
-    });
-  } catch (error) {
-    console.error("Erreur MongoDB:", error.message);
-    process.exit(1);
-  }
-}
-
-startServer();
